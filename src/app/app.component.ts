@@ -6,6 +6,7 @@ import { FormBuilder, FormGroup } from "@angular/forms";
 
 import {NgbModal, ModalDismissReasons} from '@ng-bootstrap/ng-bootstrap';
 import * as $ from "jquery";
+import { JsonPipe } from '@angular/common';
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
@@ -20,6 +21,7 @@ export class AppComponent {
   {
     this.getdata();
     this.form = this.fb.group({
+      _id : [''],
       Name : [''],
       Age : [''],
       City : ['']
@@ -36,10 +38,13 @@ export class AppComponent {
 
   private getDismissReason(reason: any): string {
     if (reason === ModalDismissReasons.ESC) {
+      this.form.reset();
       return 'by pressing ESC';
     } else if (reason === ModalDismissReasons.BACKDROP_CLICK) {
+      this.form.reset();
       return 'by clicking on a backdrop';
     } else {
+      this.form.reset();
       return `with: ${reason}`;
     }
   }
@@ -74,6 +79,11 @@ export class AppComponent {
   }
   update()
   {
+   this.http.put("http://localhost:3000/update",this.form.value).subscribe(x=>{
+     alert(x);
+     this.form.reset();
+     this.getdata();
+   });
 
   }
 
